@@ -9,7 +9,7 @@ This project contains a very basic example API and can be used as a starting poi
 You will need the following software:
 
 - [.NET Core (At least version 3.1)](https://dotnet.microsoft.com/download).
-- An editor/IDE of your choice. Personally I use [Visual Studio Code](https://code.visualstudio.com/). When you open a `.cs` file from the project it will suggest an extension (C#); installing that add intellisense.
+- An editor/IDE of your choice. Personally I use [Visual Studio Code](https://code.visualstudio.com/). When you open a `.cs` file from the project it will suggest an extension (C#); installing that add intellisense. See the last point in this document for a list of suggested extensions.
 
 ## Usage
 
@@ -26,3 +26,18 @@ Read through the code; it has been extensively commented.
 
 - Add extra endpoints to manipulate the cars in the database.
 - [Refactor](https://wiki.c2.com/?WhatIsRefactoring) the code.
+
+## Suggested visual studio extensions
+
+- [C#](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
+- [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+
+### Suggested editor settings
+
+To change this, open your settings via `ctrl+p` and type settings. One of the options should be "Preferences: Open Settings", this opens a json file where you might (or might not) have the settings of your editor.
+
+```json
+{
+  "editor.formatOnSave": true
+}
+```
