@@ -6,16 +6,6 @@ using BasicRestAPI.Model.Domain;
 
 namespace BasicRestAPI.Repositories
 {
-
-    public interface IGarageRepository
-    {
-        IEnumerable<Garage> GetAllGarages();
-        Garage GetOneGarageById(int id);
-        void Delete(int id);
-        Garage Insert(string name);
-        Garage Update(int id, string name);
-    }
-
     // Repository pattern: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design#the-repository-pattern
     // This class will be further expanded in later lessons, when we are talking about interfacing with databases.
     public class GarageRepository : IGarageRepository

@@ -48,7 +48,8 @@ namespace BasicRestAPI.Controllers
             return Created($"/garages/{persistedGarage.Id}", persistedGarage.Convert());
         }
 
-        [HttpPut("{id}")]
+        // this method went from a PUT to a PATCH. Why? (answer @ https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#define-operations-in-terms-of-http-methods)
+        [HttpPatch("{id}")]
         public IActionResult UpdateGarage(int id, GarageUpsertInput input)
         {
             _logger.LogInformation("Updating a garage", input);
