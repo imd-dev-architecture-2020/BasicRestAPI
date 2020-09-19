@@ -1,6 +1,8 @@
 using BasicRestAPI.Database;
+using BasicRestAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,10 +23,8 @@ namespace BasicRestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // Notice that we can program to interfaces here.
-            // Singleton is a design pattern (https://refactoring.guru/design-patterns/singleton) 
-            services.AddSingleton<IInMemoryDatabase, InMemoryDatabase>();
-            // Generate a swagger file automatically (https://swagger.io/) using swashbuckle (https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+            services.AddDbContext<GarageDatabaseContext>();
+            services.AddTransient<IGarageRepository, GarageRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -36,13 +36,16 @@ namespace BasicRestAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GarageDatabaseContext context)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            // this is pretty rudimentary and temporary. Causes the DB to be generated if it does **not** exist.
+            // you can regenerate the database by deleting the database file from your root directory 
+            context.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 

@@ -42,3 +42,6 @@ To change this, open your settings via `ctrl+p` and type settings. One of the op
   "editor.formatOnSave": true
 }
 ```
+
+## Postman script
+In the `Example Calls - Basic Rest API.postman_collection` file you can find an example testsuite for Postman. It is highly suggested that you make a testsuite for your own project; that way you know for certain your changes do not impact any functionality (no regression). 

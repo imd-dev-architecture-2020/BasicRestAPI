@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BasicRestAPI.Models.Domain
+namespace BasicRestAPI.Model.Domain
 {
     public class Garage : BaseDatabaseClass
     {

@@ -1,5 +1,7 @@
-namespace BasicRestAPI.Models.Web
+namespace BasicRestAPI.Model.Web
 {
+    // Notice that "cars" is absent. When you want to view a garage you only want to view the garage info, not the related cars.
+    // Those cars will have their own DTOs (https://en.wikipedia.org/wiki/Data_transfer_object)
     public class GarageWebOutput
     {
         public GarageWebOutput(int id, string name)

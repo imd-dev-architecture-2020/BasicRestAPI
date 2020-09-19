@@ -1,4 +1,4 @@
-namespace BasicRestAPI.Models.Domain
+namespace BasicRestAPI.Model.Domain
 {
     public abstract class BaseDatabaseClass
     {
