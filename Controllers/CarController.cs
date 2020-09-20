@@ -43,7 +43,7 @@ namespace BasicRestAPI.Controllers
             _logger.LogInformation($"Creating a car for garage {garageId}");
             try
             {
-                var persistedCar = _carRepository.Insert(id, input.Name, input.Brand);
+                var persistedCar = _carRepository.Insert(garageId, input.Name, input.Brand);
                 return Created($"/garages/{garageId}/cars/{persistedCar.Id}", persistedCar.Convert());
             }
             catch (NotFoundException)
