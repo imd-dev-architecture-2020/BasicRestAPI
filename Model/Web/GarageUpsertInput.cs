@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.AccessControl;
 
 namespace BasicRestAPI.Model.Web
 {
     // This is incoming data
+    // Debatable whether or not this is a good idea; normally you should split the POST/PUT messages.
+    // However, since name is the only data we can change we reuse the class everywhere.
     public class GarageUpsertInput
     {
         // This is called "Model validation"

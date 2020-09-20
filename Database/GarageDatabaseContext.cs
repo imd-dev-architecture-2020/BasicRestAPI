@@ -11,5 +11,6 @@ namespace BasicRestAPI.Database
             => optionsBuilder.UseSqlite("Data Source=garages.db");
 
         public DbSet<Garage> Garages { get; set; }
+        public DbSet<Car> Cars { get; set; }
     }
 }

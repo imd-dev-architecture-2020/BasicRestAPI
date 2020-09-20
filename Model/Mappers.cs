@@ -10,5 +10,10 @@ namespace BasicRestAPI.Model
         {
             return new GarageWebOutput(input.Id, input.Name);
         }
+
+        public static CarWebOutput Convert(this Car input)
+        {
+            return new CarWebOutput(input.Id, input.Name, input.Brand);
+        }
     }
 }

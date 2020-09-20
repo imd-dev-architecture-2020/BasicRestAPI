@@ -25,6 +25,7 @@ namespace BasicRestAPI
             services.AddControllers();
             services.AddDbContext<GarageDatabaseContext>();
             services.AddTransient<IGarageRepository, GarageRepository>();
+            services.AddTransient<ICarRepository, CarRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
