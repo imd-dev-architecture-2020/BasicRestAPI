@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace BasicRestAPI.Controllers
 {
-    // TODO there is a lot of duplicate code here; feel free to refactor as much as you want. (https://refactoring.com/) 
     [ApiController]
     [Route("garages")]
     public class GarageController : ControllerBase
