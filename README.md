@@ -13,7 +13,7 @@ You will need the following software:
 
 ## Usage
 
-You can use `dotnet watch run` to run the project; after you get the notification that the application started navigate to <https://localhost:5001/swagger/index.html>; you will get an overview with all the API methods and a quick method to execute them.
+You can use `dotnet watch run` to run the project; after you get the notification that the application started navigate to <http://localhost:5000/swagger/index.html>; you will get an overview with all the API methods and a quick method to execute them.
 
 Read through the code; it has been extensively commented.
 
