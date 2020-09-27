@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "a3454b6f-180b-4de7-a6ab-4ab09b71e052",
+		"name": "Example Calls - Basic Rest API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Insert test data - one garage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9fd03fc1-44ac-4190-932f-f8ab32f9e650",
+						"exec": [
+							"pm.test(\"status test\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.be.eql(\"Ford - Merksem\");\r",
+							"    pm.expect(responseJson.id).to.be.a('number');\r",
+							"\r",
+							"    pm.environment.set(\"INSERTED_ID\", responseJson.id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{INSERT_TEST_NAME}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/garages",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages"
+					]
+				},
+				"description": "Initial test setup"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Inserted Garage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ae947a84-2486-4e89-99c8-b4d0b6ade9a0",
+						"exec": [
+							"pm.test(\"Get one previously inserted item\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.be.eql(\"Ford - Merksem\");\r",
+							"    pm.expect(responseJson.id).to.be.eql(pm.environment.get(\"INSERTED_ID\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages/{{INSERTED_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages",
+						"{{INSERTED_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Garages",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "262d36cd-1183-4c4b-993b-cbdc06251ccc",
+						"exec": [
+							"pm.test(\"get all garages test\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const responseJson = pm.response.json()\r",
+							"    const insertedId = pm.environment.get(\"INSERTED_ID\");\r",
+							"    const lookingFor = responseJson.find(x => x.id == insertedId);\r",
+							"    pm.expect(lookingFor.name).to.be.eql(pm.environment.get(\"INSERT_TEST_NAME\"));\r",
+							"    pm.expect(lookingFor.id).to.be.eql(insertedId);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Garage",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{UPDATE_TEST_NAME}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/garages/{{INSERTED_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages",
+						"{{INSERTED_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Inserted Garage - After Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7d22675f-cc66-46c2-aa74-96da89d34c86",
+						"exec": [
+							"pm.test(\"Get one previously inserted item\", function() { \r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.be.eql(pm.environment.get(\"UPDATE_TEST_NAME\"));\r",
+							"    pm.expect(responseJson.id).to.be.eql(pm.environment.get(\"INSERTED_ID\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages/{{INSERTED_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages",
+						"{{INSERTED_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Garages - After Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52d1c91c-3634-40a1-ae50-6ebde08504fe",
+						"exec": [
+							"pm.test(\"get all garages test\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const responseJson = pm.response.json()\r",
+							"    const insertedId = pm.environment.get(\"INSERTED_ID\");\r",
+							"    const lookingFor = responseJson.find(x => x.id == insertedId);\r",
+							"    pm.expect(lookingFor.name).to.be.eql(pm.environment.get(\"UPDATE_TEST_NAME\"));\r",
+							"    pm.expect(lookingFor.id).to.be.eql(insertedId);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Garage",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages/{{INSERTED_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages",
+						"{{INSERTED_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Inserted Garage - After Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "509d1f29-67c6-49bc-aa7f-135378463602",
+						"exec": [
+							"pm.test(\"Get one previously deleted item\", function() { \r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages/{{INSERTED_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages",
+						"{{INSERTED_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Garages - After Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1049f5fb-d628-424b-a05d-c4c844a0d223",
+						"exec": [
+							"pm.test(\"get all garages test\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const responseJson = pm.response.json()\r",
+							"    const insertedId = pm.environment.get(\"INSERTED_ID\");\r",
+							"    const lookingFor = responseJson.find(x => x.id == insertedId);\r",
+							"    pm.expect(lookingFor).to.equal(undefined);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/garages",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"garages"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
