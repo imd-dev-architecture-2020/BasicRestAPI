@@ -24,6 +24,7 @@ namespace BasicRestAPI
         {
             services.AddControllers();
             services.AddDbContext<GarageDatabaseContext>();
+            // dependency injection https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes-and-registration-options
             services.AddTransient<IGarageRepository, GarageRepository>();
             services.AddTransient<ICarRepository, CarRepository>();
             services.AddSwaggerGen(c =>
@@ -45,7 +46,7 @@ namespace BasicRestAPI
             }
 
             // this is pretty rudimentary and temporary. Causes the DB to be generated if it does **not** exist.
-            // you can regenerate the database by deleting the database file from your root directory 
+            // you can regenerate the database by deleting the database file from your root directory (garages.db)
             context.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
