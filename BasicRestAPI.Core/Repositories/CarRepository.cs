@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BasicRestAPI.Repositories
 {
+    // This class will be further expanded in later lessons, when we are talking about interfacing with databases.
     public class CarRepository : ICarRepository
     {
         private readonly GarageDatabaseContext _context;

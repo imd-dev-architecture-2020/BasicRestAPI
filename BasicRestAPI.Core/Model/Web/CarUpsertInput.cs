@@ -8,6 +8,7 @@ namespace BasicRestAPI.Model.Web
         [Required]
         [StringLength(1000)]
         public string Name { get; set; }
+
         [Required]
         public Brand Brand { get; set; }
     }
