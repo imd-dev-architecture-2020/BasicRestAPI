@@ -1,0 +1,12 @@
+﻿{
+  "Result": "{\"id\":1,\"name\":\"hey\"}",
+  "Id": 1,
+  "Exception": null,
+  "Status": "RanToCompletion",
+  "IsCanceled": false,
+  "IsCompleted": true,
+  "IsCompletedSuccessfully": true,
+  "CreationOptions": "None",
+  "AsyncState": null,
+  "IsFaulted": false
+}

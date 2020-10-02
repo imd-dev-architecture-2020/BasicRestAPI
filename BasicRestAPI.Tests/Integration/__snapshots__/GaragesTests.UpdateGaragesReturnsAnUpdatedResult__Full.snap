@@ -1,0 +1,35 @@
+﻿{
+  "Version": "1.1",
+  "Content": {
+    "Headers": [
+      {
+        "Key": "Content-Type",
+        "Value": [
+          "application/json; charset=utf-8"
+        ]
+      }
+    ]
+  },
+  "StatusCode": "OK",
+  "ReasonPhrase": "OK",
+  "Headers": [],
+  "TrailingHeaders": [],
+  "RequestMessage": {
+    "Version": "1.1",
+    "Content": null,
+    "Method": {
+      "Method": "GET"
+    },
+    "RequestUri": "http://localhost/garages/1",
+    "Headers": [
+      {
+        "Key": "Cookie",
+        "Value": [
+          ""
+        ]
+      }
+    ],
+    "Properties": {}
+  },
+  "IsSuccessStatusCode": true
+}

@@ -2,6 +2,7 @@ using BasicRestAPI.Database;
 using BasicRestAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,7 @@ namespace BasicRestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<GarageDatabaseContext>();
+            services.AddDbContext<GarageDatabaseContext>(opts => opts.UseSqlite("Data Source=garages.db"));
             // dependency injection https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes-and-registration-options
             services.AddTransient<IGarageRepository, GarageRepository>();
             services.AddTransient<ICarRepository, CarRepository>();
