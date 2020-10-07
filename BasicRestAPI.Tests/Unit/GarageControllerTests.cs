@@ -64,13 +64,13 @@ namespace BasicRestAPI.Tests.Unit
                     Name = "test garage 3"
                 },
             };
-            // setup phase: setup whatever we expect
+            // Arrange
             _garageRepoMock.Setup(x => x.GetAllGarages()).Returns(returnSet).Verifiable();
 
-            // execution phase
+            // Act
             var garageResponse = _garageController.GetAllGarages();
 
-            // verification phase
+            // Assert
             garageResponse.Should().BeOfType<OkObjectResult>();
 
             // verify via a snapshot (https://swisslife-oss.github.io/snapshooter/)
