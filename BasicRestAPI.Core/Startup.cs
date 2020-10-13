@@ -1,3 +1,4 @@
+using System;
 using BasicRestAPI.Database;
 using BasicRestAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +8,9 @@ using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace BasicRestAPI
 {
@@ -24,7 +27,25 @@ namespace BasicRestAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<GarageDatabaseContext>(opts => opts.UseSqlite("Data Source=garages.db"));
+            // this helper method says "whenever you need a database context, create one using the options specified in my builder".
+            // https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql
+            services.AddDbContextPool<GarageDatabaseContext>(    
+                dbContextOptions => dbContextOptions
+                    .UseMySql(
+                        // Replace with your connection string. Should be in your env but for example purposes this is _good enough_ for now
+                        "server=localhost;user=root;password=example;database=garages-dev",
+                        // Replace with your server version and type.
+                        mySqlOptions => mySqlOptions
+                            .ServerVersion(new Version(8, 0, 21), ServerType.MySql)
+                            .CharSetBehavior(CharSetBehavior.NeverAppend))
+                    // Everything from this point on is optional but helps with debugging.
+                    .UseLoggerFactory(
+                        LoggerFactory.Create(
+                            logging => logging
+                                .AddConsole()
+                                .AddFilter(level => level >= LogLevel.Information)))
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors());
             // dependency injection https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes-and-registration-options
             services.AddTransient<IGarageRepository, GarageRepository>();
             services.AddTransient<ICarRepository, CarRepository>();
@@ -48,7 +69,8 @@ namespace BasicRestAPI
 
             // this is pretty rudimentary and temporary. Causes the DB to be generated if it does **not** exist.
             // you can regenerate the database by deleting the database file from your root directory (garages.db)
-            context.Database.EnsureCreated();
+            // commented in favor of migrations
+            //context.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 
