@@ -23,8 +23,9 @@ namespace BasicRestAPI.Tests.Integration.Utils
 
                 services.Remove(descriptor);
 
-                services.AddDbContext<GarageDatabaseContext>(options =>
+                services.AddDbContextPool<GarageDatabaseContext>(options =>
                 {
+                    // notice that we use "InMemoryDatabase" here.
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
 

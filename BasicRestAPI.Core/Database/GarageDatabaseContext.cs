@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BasicRestAPI.Database
 {
-    // This is a our gateway to the database. This will be further developed/explained during the lessons on Entity Framework.
+    // This is a our gateway to the database.
     public class GarageDatabaseContext : DbContext
     {
         public GarageDatabaseContext(DbContextOptions<GarageDatabaseContext> ctx) : base(ctx)
@@ -12,6 +12,7 @@ namespace BasicRestAPI.Database
             
         }
 
+        // A DbSet can be used to add/query items. It maps to a table.
         public DbSet<Garage> Garages { get; set; }
         public DbSet<Car> Cars { get; set; }
     }
