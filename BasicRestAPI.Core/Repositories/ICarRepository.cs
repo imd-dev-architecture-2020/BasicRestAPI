@@ -8,7 +8,7 @@ namespace BasicRestAPI.Repositories
         IEnumerable<Car> GetAllCars(int garageId);
         Car GetOneCarById(int garageId, int carId);
         void Delete(int garageId, int carId);
-        Car Insert(int garageId, string name, Brand brand);
+        Car Insert(int garageId, string name, Brand brand, string color);
         Car Update(int garageId, int carId, string name, Brand brand);
     }
 }

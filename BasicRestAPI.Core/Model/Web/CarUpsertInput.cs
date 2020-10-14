@@ -11,5 +11,8 @@ namespace BasicRestAPI.Model.Web
 
         [Required]
         public Brand Brand { get; set; }
+        
+        [Required]
+        public string Color { get; set; }
     }
 }

@@ -50,14 +50,15 @@ namespace BasicRestAPI.Repositories
             _context.SaveChanges();
         }
 
-        public Car Insert(int garageId, string name, Brand brand)
+        public Car Insert(int garageId, string name, Brand brand, string color)
         {
             CheckGarageExists(garageId);
             var car = new Car()
             {
                 Brand = brand,
                 Name = name,
-                GarageId = garageId
+                GarageId = garageId,
+                Color = color
             };
             _context.Cars.Add(car);
             _context.SaveChanges();
