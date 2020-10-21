@@ -1,5 +1,4 @@
 using BasicRestAPI.Model.Domain;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasicRestAPI.Database
