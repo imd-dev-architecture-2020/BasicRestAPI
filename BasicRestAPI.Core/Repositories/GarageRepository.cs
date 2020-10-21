@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BasicRestAPI.Database;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace BasicRestAPI.Repositories
 {
@@ -17,49 +19,49 @@ namespace BasicRestAPI.Repositories
             _context = context;
         }
 
-        public IEnumerable<Garage> GetAllGarages()
+        public async Task<IEnumerable<Garage>> GetAllGarages()
         {
-            return _context.Garages.ToList();
+            return await _context.Garages.ToListAsync();
         }
 
-        public Garage GetOneGarageById(int id)
+        public async Task<Garage> GetOneGarageById(int id)
         {
-            return _context.Garages.Find(id);
+            return await _context.Garages.FindAsync(id);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var garage = _context.Garages.Find(id);
+            var garage = await _context.Garages.FindAsync(id);
             if (garage == null)
             {
                 throw new NotFoundException();
             }
 
             _context.Garages.Remove(garage);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Garage Insert(string name)
+        public async Task<Garage> Insert(string name)
         {
             var garage = new Garage
             {
                 Name = name
             };
-            _context.Garages.Add(garage);
-            _context.SaveChanges();
+            await _context.Garages.AddAsync(garage);
+            await _context.SaveChangesAsync();
             return garage;
         }
 
-        public Garage Update(int id, string name)
+        public async Task<Garage> Update(int id, string name)
         {
-            var garage = _context.Garages.Find(id);
+            var garage = await _context.Garages.FindAsync(id);
             if (garage == null)
             {
                 throw new NotFoundException();
             }
 
             garage.Name = name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return garage;
         }
     }

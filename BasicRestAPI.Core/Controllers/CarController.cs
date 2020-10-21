@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Web;
 using BasicRestAPI.Repositories;
@@ -35,12 +36,12 @@ namespace BasicRestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         // this one is needed b/c we only handle NotFoundExceptions explicitly. Other errors just go through and throw a 400/500.
         [ProducesDefaultResponseType]
-        public IActionResult GetAllCarsForGarage(int garageId)
+        public async Task<IActionResult> GetAllCarsForGarage(int garageId)
         {
             _logger.LogInformation($"Getting all cars for garage {garageId}");
             try
             {
-                return Ok(_carRepository.GetAllCars(garageId).Select(x => x.Convert()).ToList());
+                return Ok((await _carRepository.GetAllCars(garageId)).Select(x => x.Convert()).ToList());
             }
             catch (NotFoundException)
             {
@@ -58,12 +59,12 @@ namespace BasicRestAPI.Controllers
         [ProducesResponseType(typeof(CarWebOutput),StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult AddCarToGarage(int garageId, CarUpsertInput input)
+        public async Task<IActionResult> AddCarToGarage(int garageId, CarUpsertInput input)
         {
             _logger.LogInformation($"Creating a car for garage {garageId}");
             try
             {
-                var persistedCar = _carRepository.Insert(garageId, input.Name, input.Brand, input.Color);
+                var persistedCar = await _carRepository.Insert(garageId, input.Name, input.Brand, input.Color);
                 return Created($"/garages/{garageId}/cars/{persistedCar.Id}", persistedCar.Convert());
             }
             catch (NotFoundException)

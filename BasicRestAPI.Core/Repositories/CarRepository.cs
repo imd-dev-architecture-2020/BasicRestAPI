@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BasicRestAPI.Database;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Domain;
@@ -16,11 +17,11 @@ namespace BasicRestAPI.Repositories
         {
             _context = context;
         }
-        public IEnumerable<Car> GetAllCars(int garageId)
+        public async Task<IEnumerable<Car>> GetAllCars(int garageId)
         {
-            var garageWithCars = _context.Garages
+            var garageWithCars = await _context.Garages
                 .Include(x => x.Cars)
-                .FirstOrDefault(x => x.Id == garageId);
+                .FirstOrDefaultAsync(x => x.Id == garageId);
             if (garageWithCars == null)
             {
                 throw new NotFoundException();
@@ -29,11 +30,11 @@ namespace BasicRestAPI.Repositories
             return garageWithCars.Cars;
         }
 
-        public Car GetOneCarById(int garageId, int carId)
+        public async Task<Car> GetOneCarById(int garageId, int carId)
         {
-            CheckGarageExists(garageId);
+            await CheckGarageExists(garageId);
 
-            var car = _context.Cars.FirstOrDefault(x => x.GarageId == garageId && x.Id == carId);
+            var car = await _context.Cars.FirstOrDefaultAsync(x => x.GarageId == garageId && x.Id == carId);
             if (car == null)
             {
                 throw new NotFoundException();
@@ -43,16 +44,16 @@ namespace BasicRestAPI.Repositories
         }
 
 
-        public void Delete(int garageId, int carId)
+        public async Task Delete(int garageId, int carId)
         {
-            var car = GetOneCarById(garageId, carId);
+            var car = await GetOneCarById(garageId, carId);
             _context.Cars.Remove(car);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Car Insert(int garageId, string name, Brand brand, string color)
+        public async Task<Car> Insert(int garageId, string name, Brand brand, string color)
         {
-            CheckGarageExists(garageId);
+            await CheckGarageExists(garageId);
             var car = new Car()
             {
                 Brand = brand,
@@ -60,24 +61,24 @@ namespace BasicRestAPI.Repositories
                 GarageId = garageId,
                 Color = color
             };
-            _context.Cars.Add(car);
-            _context.SaveChanges();
+            await _context.Cars.AddAsync(car);
+            await _context.SaveChangesAsync();
             return car;
 
         }
 
-        public Car Update(int garageId, int carId, string name, Brand brand)
+        public async Task<Car> Update(int garageId, int carId, string name, Brand brand)
         {
-            var car = GetOneCarById(garageId, carId);
+            var car = await GetOneCarById(garageId, carId);
             car.Brand = brand;
             car.Name = name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return car;
         }
 
-        private void CheckGarageExists(int garageId)
+        private async Task CheckGarageExists(int garageId)
         {
-            var garageCheck = _context.Garages.Find(garageId);
+            var garageCheck = await _context.Garages.FindAsync(garageId);
             if (garageCheck == null)
             {
                 throw new NotFoundException();
