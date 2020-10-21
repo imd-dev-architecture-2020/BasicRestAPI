@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Web;
 using BasicRestAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace BasicRestAPI.Controllers
 {
@@ -23,6 +25,7 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<GarageWebOutput>), StatusCodes.Status200OK)]
         public IActionResult GetAllGarages()
         {
             _logger.LogInformation("Getting all garages");
@@ -32,6 +35,7 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(GarageWebOutput), StatusCodes.Status200OK)]
         public IActionResult GarageById(int id)
         {
             _logger.LogInformation("Getting garage by id", id);
@@ -41,6 +45,8 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(GarageWebOutput),StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
         public IActionResult CreateGarage(GarageUpsertInput input)
         {
             _logger.LogInformation("Creating a garage", input);
@@ -50,14 +56,17 @@ namespace BasicRestAPI.Controllers
 
         // this method went from a PUT to a PATCH. Why? (answer @ https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#define-operations-in-terms-of-http-methods)
         [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult UpdateGarage(int id, GarageUpsertInput input)
         {
             _logger.LogInformation("Updating a garage", input);
             // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/try-catch
             try
             {
-                var garage = _garageRepository.Update(id, input.Name);
-                return Accepted(garage.Convert());
+                _garageRepository.Update(id, input.Name);
+                return Accepted();
             }
             catch (NotFoundException)
             {
@@ -67,6 +76,9 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult DeleteGarage(int id)
         {
             _logger.LogInformation("Deleting a garage", id);

@@ -12,6 +12,10 @@ namespace BasicRestAPI.Model.Web
         [Required]
         public Brand Brand { get; set; }
         
+        // Don't write comments like this -- this is an example.
+        /// <summary>
+        /// The color of the car.
+        /// </summary>
         [Required]
         public string Color { get; set; }
     }

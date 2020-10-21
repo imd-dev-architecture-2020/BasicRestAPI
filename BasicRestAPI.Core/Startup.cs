@@ -1,10 +1,11 @@
 using System;
+using System.IO;
+using System.Text.Json.Serialization;
 using BasicRestAPI.Database;
 using BasicRestAPI.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +27,11 @@ namespace BasicRestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddJsonOptions(options => 
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+                ;
             // this helper method says "whenever you need a database context, create one using the options specified in my builder".
             // https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql
             services.AddDbContextPool<GarageDatabaseContext>(    
@@ -56,7 +61,11 @@ namespace BasicRestAPI
                     Version = "v1",
                     Title = "Garage API",
                 });
+                
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "BasicRestAPI.xml");
+                c.IncludeXmlComments(filePath);
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Web;
 using BasicRestAPI.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,7 +25,16 @@ namespace BasicRestAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Gets you a list of all the cars inside a garage. If the garage does not exist, you get a 404. An empty list means "no cars available".
+        /// </summary>
+        /// <param name="garageId">The unique identifier of the garage</param>
+        /// <returns>A list of cars</returns>
         [HttpGet("{garageId}/cars")]
+        [ProducesResponseType(typeof(IEnumerable<CarWebOutput>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        // this one is needed b/c we only handle NotFoundExceptions explicitly. Other errors just go through and throw a 400/500.
+        [ProducesDefaultResponseType]
         public IActionResult GetAllCarsForGarage(int garageId)
         {
             _logger.LogInformation($"Getting all cars for garage {garageId}");
@@ -37,7 +48,16 @@ namespace BasicRestAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new car inside a garage. A 404 means that the garage with said id does not exist.
+        /// </summary>
+        /// <param name="garageId">The unique identifier of the garage</param>
+        /// <param name="input">The body of the garage</param>
+        /// <returns></returns>
         [HttpPost("{garageId}/cars")]
+        [ProducesResponseType(typeof(CarWebOutput),StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult AddCarToGarage(int garageId, CarUpsertInput input)
         {
             _logger.LogInformation($"Creating a car for garage {garageId}");
@@ -53,6 +73,9 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpPatch("{id}/cars/{carId}")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult UpdateCarInGarage(int garageId, int carId, CarUpsertInput input)
         {
             _logger.LogInformation($"Updating car {carId} for garage {garageId}");
@@ -68,18 +91,21 @@ namespace BasicRestAPI.Controllers
         }
 
         [HttpDelete("{id}/cars/{carId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public IActionResult DeleteCarFromGarage(int garageId, int carId)
         {
             _logger.LogInformation($"Deleting car {carId} from garage {garageId}");
             try
             {
                 _carRepository.Delete(garageId, carId);
+                return NoContent();
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
-            return NoContent();
         }
     }
 }

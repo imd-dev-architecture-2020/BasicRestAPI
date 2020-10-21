@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BasicRestAPI</name>
+    </assembly>
+    <members>
+        <member name="M:BasicRestAPI.Controllers.CarController.GetAllCarsForGarage(System.Int32)">
+            <summary>
+            Gets you a list of all the cars inside a garage. If the garage does not exist, you get a 404. An empty list means "no cars available".
+            </summary>
+            <param name="garageId">The unique identifier of the garage</param>
+            <returns>A list of cars</returns>
+        </member>
+        <member name="M:BasicRestAPI.Controllers.CarController.AddCarToGarage(System.Int32,BasicRestAPI.Model.Web.CarUpsertInput)">
+            <summary>
+            Creates a new car inside a garage. A 404 means that the garage with said id does not exist.
+            </summary>
+            <param name="garageId">The unique identifier of the garage</param>
+            <param name="input">The body of the garage</param>
+            <returns></returns>
+        </member>
+        <member name="P:BasicRestAPI.Model.Web.CarUpsertInput.Color">
+            <summary>
+            The color of the car.
+            </summary>
+        </member>
+        <member name="P:BasicRestAPI.Model.Web.CarWebOutput.Id">
+            <summary>
+            This is an identifier that is guaranteed to be unique within the context of a single instance of our API,
+            </summary>
+        </member>
+    </members>
+</doc>
