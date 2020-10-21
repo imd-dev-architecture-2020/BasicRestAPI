@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Web;
 using BasicRestAPI.Repositories;
@@ -26,20 +27,20 @@ namespace BasicRestAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GarageWebOutput>), StatusCodes.Status200OK)]
-        public IActionResult GetAllGarages()
+        public async Task<IActionResult> GetAllGarages()
         {
             _logger.LogInformation("Getting all garages");
             // This is a linq extension method: https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.select?view=netcore-3.1
-            var garages = _garageRepository.GetAllGarages().Select(x => x.Convert()).ToList();
+            var garages = (await _garageRepository.GetAllGarages()).Select(x => x.Convert()).ToList();
             return Ok(garages);
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GarageWebOutput), StatusCodes.Status200OK)]
-        public IActionResult GarageById(int id)
+        public async Task<IActionResult> GarageById(int id)
         {
             _logger.LogInformation("Getting garage by id", id);
-            var garage = _garageRepository.GetOneGarageById(id);
+            var garage = await _garageRepository.GetOneGarageById(id);
             // Ternary operator: https://en.wikipedia.org/wiki/%3F:
             return garage == null ? (IActionResult) NotFound() : Ok(garage.Convert());
         }
@@ -47,10 +48,10 @@ namespace BasicRestAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(GarageWebOutput),StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public IActionResult CreateGarage(GarageUpsertInput input)
+        public async Task<IActionResult> CreateGarage(GarageUpsertInput input)
         {
             _logger.LogInformation("Creating a garage", input);
-            var persistedGarage = _garageRepository.Insert(input.Name);
+            var persistedGarage = await _garageRepository.Insert(input.Name);
             return Created($"/garages/{persistedGarage.Id}", persistedGarage.Convert());
         }
 
@@ -59,13 +60,13 @@ namespace BasicRestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult UpdateGarage(int id, GarageUpsertInput input)
+        public async Task<IActionResult> UpdateGarage(int id, GarageUpsertInput input)
         {
             _logger.LogInformation("Updating a garage", input);
             // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/try-catch
             try
             {
-                _garageRepository.Update(id, input.Name);
+                await _garageRepository.Update(id, input.Name);
                 return Accepted();
             }
             catch (NotFoundException)
@@ -79,12 +80,12 @@ namespace BasicRestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult DeleteGarage(int id)
+        public async Task<IActionResult> DeleteGarage(int id)
         {
             _logger.LogInformation("Deleting a garage", id);
             try
             {
-                _garageRepository.Delete(id);
+                await _garageRepository.Delete(id);
                return NoContent();
             }
             catch (NotFoundException)

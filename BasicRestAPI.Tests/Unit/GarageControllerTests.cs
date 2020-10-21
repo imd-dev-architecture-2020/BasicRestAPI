@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BasicRestAPI.Controllers;
 using BasicRestAPI.Model;
 using BasicRestAPI.Model.Domain;
@@ -41,7 +43,7 @@ namespace BasicRestAPI.Tests.Unit
 
 
         [Fact]
-        public void TestGetAllGarages()
+        public async Task TestGetAllGarages()
         {
             var returnSet = new[]
             {
@@ -65,10 +67,10 @@ namespace BasicRestAPI.Tests.Unit
                 },
             };
             // Arrange
-            _garageRepoMock.Setup(x => x.GetAllGarages()).Returns(returnSet).Verifiable();
+            _garageRepoMock.Setup(x => x.GetAllGarages()).Returns(Task.FromResult((IEnumerable<Garage>)returnSet)).Verifiable();
 
             // Act
-            var garageResponse = _garageController.GetAllGarages();
+            var garageResponse = await _garageController.GetAllGarages();
 
             // Assert
             garageResponse.Should().BeOfType<OkObjectResult>();
@@ -80,38 +82,38 @@ namespace BasicRestAPI.Tests.Unit
 
      
         [Fact]
-        public void TestGetOneGarageHappyPath()
+        public async Task TestGetOneGarageHappyPath()
         {
             var garage = new Garage()
             {
                 Id = 1,
                 Name = "12"
             };
-            _garageRepoMock.Setup(x => x.GetOneGarageById(1)).Returns(garage).Verifiable();
-            var garageResponse = _garageController.GarageById(1);
+            _garageRepoMock.Setup(x => x.GetOneGarageById(1)).Returns(Task.FromResult(garage)).Verifiable();
+            var garageResponse = await _garageController.GarageById(1);
             garageResponse.Should().BeOfType<OkObjectResult>();
             Snapshot.Match(garageResponse);
         }   
 
         [Fact]
-        public void TestGetOneGarageNotFound()
+        public async Task TestGetOneGarageNotFound()
         {
-            _garageRepoMock.Setup(x => x.GetOneGarageById(1)).Returns(null as Garage).Verifiable();
-            var garageResponse = _garageController.GarageById(1);
+            _garageRepoMock.Setup(x => x.GetOneGarageById(1)).Returns(Task.FromResult(null as Garage)).Verifiable();
+            var garageResponse = await _garageController.GarageById(1);
             garageResponse.Should().BeOfType<NotFoundResult>();
             Snapshot.Match(garageResponse);
         }
 
         [Fact]
-        public void TestInsertOneGarage()
+        public async Task TestInsertOneGarage()
         {
             var garage = new Garage()
             {
                 Id = 1,
                 Name = "abcdef"
             };            
-            _garageRepoMock.Setup(x => x.Insert("abcdef")).Returns(garage).Verifiable();
-            var garageResponse = _garageController.CreateGarage(new GarageUpsertInput()
+            _garageRepoMock.Setup(x => x.Insert("abcdef")).Returns(Task.FromResult(garage)).Verifiable();
+            var garageResponse = await _garageController.CreateGarage(new GarageUpsertInput()
             {
                 Name = "abcdef"
             });
@@ -120,15 +122,15 @@ namespace BasicRestAPI.Tests.Unit
         }
 
         [Fact]
-        public void TestUpdateOneGarageHappyPath()
+        public async Task TestUpdateOneGarageHappyPath()
         {
             var garage = new Garage()
             {
                 Id = 1,
                 Name = "ghijkl"
             };            
-            _garageRepoMock.Setup(x => x.Update(1, "ghijkl")).Returns(garage).Verifiable();
-            var garageResponse = _garageController.UpdateGarage(1, new GarageUpsertInput()
+            _garageRepoMock.Setup(x => x.Update(1, "ghijkl")).Returns(Task.FromResult(garage)).Verifiable();
+            var garageResponse = await _garageController.UpdateGarage(1, new GarageUpsertInput()
             {
                 Name = "ghijkl"
             });
@@ -137,14 +139,14 @@ namespace BasicRestAPI.Tests.Unit
         }
 
         [Fact]
-        public void TestUpdateOneGarageNotFound()
+        public async Task TestUpdateOneGarageNotFound()
         {
    
             _garageRepoMock
                 .Setup(x => x.Update(1, "ghijkl"))
                 .Throws<NotFoundException>()
                 .Verifiable();
-            var garageResponse = _garageController.UpdateGarage(1, new GarageUpsertInput()
+            var garageResponse = await _garageController.UpdateGarage(1, new GarageUpsertInput()
             {
                 Name = "ghijkl"
             });
