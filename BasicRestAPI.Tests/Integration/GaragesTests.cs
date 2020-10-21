@@ -174,31 +174,5 @@ namespace BasicRestAPI.Tests.Integration
             var patchResponse = await client.PatchAsync("/garages/1", ContentHelper.GetStringContent(request.Body));
             patchResponse.StatusCode.Should().Be(404);
         }
-
-        [Fact]
-        public async Task UpdateGaragesReturnsAnUpdatedResult()
-        {
-            var client = _factory.CreateClient();
-            _factory.ResetAndSeedDatabase((db) =>
-            {
-                db.Garages.Add(new Garage() {Id = 1, Name = "abcdef"});
-            });
-            var request = new
-            {
-                Body = new GarageUpsertInput
-                {
-                    Name = "hey"
-                }
-            };
-            var patchResponse = await client.PatchAsync("/garages/1", ContentHelper.GetStringContent(request.Body));
-            patchResponse.EnsureSuccessStatusCode();
-            var body = JsonConvert.DeserializeObject<GarageWebOutput>(await patchResponse.Content.ReadAsStringAsync());
-            body.Should().NotBeNull();
-            body.Name.Should().Be("hey");
-            var getResponse = await client.GetAsync($"/garages/{body.Id}");
-            getResponse.EnsureSuccessStatusCode();
-            Snapshot.Match(getResponse.Content.ReadAsStringAsync(), new SnapshotNameExtension("_Content"));
-            Snapshot.Match(getResponse, new SnapshotNameExtension("_Full"));
-        }
     }
 }

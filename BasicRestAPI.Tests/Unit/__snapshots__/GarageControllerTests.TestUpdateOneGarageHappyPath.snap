@@ -1,9 +1,6 @@
 ﻿{
   "Location": null,
-  "Value": {
-    "Id": 1,
-    "Name": "ghijkl"
-  },
+  "Value": null,
   "Formatters": [],
   "ContentTypes": [],
   "DeclaredType": null,
