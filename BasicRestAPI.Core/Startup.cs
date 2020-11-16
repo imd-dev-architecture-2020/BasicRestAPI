@@ -29,16 +29,16 @@ namespace BasicRestAPI
         {
             services
                 .AddControllers()
-                .AddJsonOptions(options => 
+                .AddJsonOptions(options =>
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-                ;
+            ;
             // this helper method says "whenever you need a database context, create one using the options specified in my builder".
             // https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql
-            services.AddDbContextPool<GarageDatabaseContext>(    
+            services.AddDbContextPool<GarageDatabaseContext>(
                 dbContextOptions => dbContextOptions
                     .UseMySql(
                         // Replace with your connection string. Should be in your env but for example purposes this is _good enough_ for now
-                        "server=localhost;user=root;password=example;database=garages-dev",
+                        Configuration.GetConnectionString("GlobalDatabase"),
                         // Replace with your server version and type.
                         mySqlOptions => mySqlOptions
                             .ServerVersion(new Version(8, 0, 21), ServerType.MySql)
@@ -61,7 +61,7 @@ namespace BasicRestAPI
                     Version = "v1",
                     Title = "Garage API",
                 });
-                
+
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "BasicRestAPI.xml");
                 c.IncludeXmlComments(filePath);
             });

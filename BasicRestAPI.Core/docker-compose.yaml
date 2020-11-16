@@ -1,19 +1,19 @@
-# Use root/example as user/password credentials
-# spins up a mariadb
-version: '3.1'
+version: "3.1"
 
 services:
+  service:
+    build: .
+    ports:
+      - "5003:80"
+    environment:
+      CONNECTIONSTRINGS__GLOBALDATABASE: server=mariadb;user=root;password=example;database=garages-dev
 
-  db:
+  mariadb:
     image: mariadb
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
-    ports: 
-        - 3306:3306
-
-  adminer:
-    image: adminer
-    restart: always
     ports:
-      - 8080:8080
+      - "3306:3306"
+    volumes:
+      - ./mariadb-store:/var/lib/mysql
