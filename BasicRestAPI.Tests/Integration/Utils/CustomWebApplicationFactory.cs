@@ -22,12 +22,15 @@ namespace BasicRestAPI.Tests.Integration.Utils
                          typeof(DbContextOptions<GarageDatabaseContext>));
 
                 services.Remove(descriptor);
+                var serviceProvider = new ServiceCollection().AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
 
                 services.AddDbContextPool<GarageDatabaseContext>(options =>
                 {
-                    // notice that we use "InMemoryDatabase" here.
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    options.UseInternalServiceProvider(serviceProvider);
+
                 });
+
 
                 var sp = services.BuildServiceProvider();
 
